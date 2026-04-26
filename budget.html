@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BudgetWise — Monthly Expense Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>💰 BudgetWise</h1>
+      <div class="small">Monthly Expense Tracker</div>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <div>
+        <div class="card form">
+          <div class="month-select">
+            <label for="month">Select Month:</label>
+            <input type="month" id="month" />
+          </div>
+
+          <input type="text" id="search" placeholder="Search expenses..." />
+
+          <h3>Add Expense</h3>
+          <input id="expense-name" type="text" placeholder="Expense Name" />
+          <input id="expense-amount" type="number" step="1" pattern="\d*" inputmode="numeric" placeholder="Amount (PKR)" min="0" />
+          <select id="expense-category">
+            <option value="">Select Category</option>
+            <option value="Food">🍔 Food</option>
+            <option value="Transport">🚗 Transport</option>
+            <option value="Bills">💡 Bills</option>
+            <option value="Shopping">🛍️ Shopping</option>
+            <option value="Other">📦 Other</option>
+          </select>
+          <button id="add-expense">Add Expense</button>
+        </div>
+
+        <div class="card" style="margin-top:16px;">
+          <h3>Expense List</h3>
+          <ul id="expense-list" class="list"></ul>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div>
+        <div class="card">
+          <h3>Summary</h3>
+          <input type="number" id="budget" placeholder="Set Monthly Budget (PKR)" />
+          <div class="total" id="total">Total: 0 PKR</div>
+          <div style="margin-top:14px;">
+            <canvas id="expenseChart" width="320" height="240"></canvas>
+          </div>
+          <div style="margin-top:14px;">
+            <h4 style="margin:0 0 8px 0">Category Breakdown</h4>
+            <div id="breakdown" class="breakdown"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>Created by Kashaf Noor</footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
