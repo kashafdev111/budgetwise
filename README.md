@@ -1,2 +1,2 @@
 # budgetwise
-Expense tracking web app (in progress)
+AI-powered expense tracker with budget management, spending analytics, interactive charts and an integrated AI Assistant.
