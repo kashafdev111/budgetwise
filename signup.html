@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - BudgetWise</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="auth-box">
+  <h2>Create your BudgetWise account</h2>
+
+  <input type="text" id="name" placeholder="Full Name">
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password (min 6 characters)">
+  <input type="password" id="confirm-password" placeholder="Confirm Password">
+
+  <button id="signup-btn">Sign Up</button>
+
+  <p class="switch-auth">Already have an account? <a href="login.html">Log in</a></p>
+  <p id="error" class="auth-error"></p>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js"></script>
+<script>
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const confirmInput = document.getElementById("confirm-password");
+const errorEl = document.getElementById("error");
+const signupBtn = document.getElementById("signup-btn");
+
+// If already logged in, skip straight to the app
+auth.onAuthStateChanged((user) => {
+  if (user) window.location.href = "budget.html";
+});
+
+signupBtn.addEventListener("click", async () => {
+  errorEl.textContent = "";
+  const name = nameInput.value.trim();
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+  const confirm = confirmInput.value;
+
+  if (!name || !email || !password || !confirm) {
+    errorEl.textContent = "Please fill in all fields.";
+    return;
+  }
+  if (password.length < 6) {
+    errorEl.textContent = "Password must be at least 6 characters.";
+    return;
+  }
+  if (password !== confirm) {
+    errorEl.textContent = "Passwords do not match.";
+    return;
+  }
+
+  signupBtn.disabled = true;
+  signupBtn.textContent = "Creating account...";
+
+  try {
+    const cred = await auth.createUserWithEmailAndPassword(email, password);
+    await cred.user.updateProfile({ displayName: name });
+
+    // Create a starter document for this user's data
+    await db.collection("users").doc(cred.user.uid).set({
+      name: name,
+      email: email,
+      budget: null,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+    window.location.href = "budget.html";
+  } catch (err) {
+    errorEl.textContent = friendlyError(err.code);
+    signupBtn.disabled = false;
+    signupBtn.textContent = "Sign Up";
+  }
+});
+
+function friendlyError(code) {
+  switch (code) {
+    case "auth/email-already-in-use":
+      return "That email is already registered. Try logging in instead.";
+    case "auth/invalid-email":
+      return "That email address looks invalid.";
+    case "auth/weak-password":
+      return "Password is too weak.";
+    default:
+      return "Something went wrong. Please try again.";
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - BudgetWise</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="auth-box">
+  <h2>Login to BudgetWise</h2>
+
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+
+  <button id="login-btn">Login</button>
+
+  <p class="switch-auth"><a href="#" id="forgot-link">Forgot password?</a></p>
+  <p class="switch-auth">Don't have an account? <a href="signup.html">Sign up</a></p>
+  <p id="error" class="auth-error"></p>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js"></script>
+<script>
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const errorEl = document.getElementById("error");
+const loginBtn = document.getElementById("login-btn");
+
+// If already logged in, skip straight to the app
+auth.onAuthStateChanged((user) => {
+  if (user) window.location.href = "budget.html";
+});
+
+loginBtn.addEventListener("click", () => login());
+passwordInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") login();
+});
+
+document.getElementById("forgot-link").addEventListener("click", async (e) => {
+  e.preventDefault();
+  errorEl.style.color = "";
+  const email = emailInput.value.trim();
+
+  if (!email) {
+    errorEl.style.color = "#e0455b";
+    errorEl.textContent = "Enter your email above first, then click \"Forgot password?\"";
+    return;
+  }
+
+  try {
+    await auth.sendPasswordResetEmail(email);
+    errorEl.style.color = "#0d9488";
+    errorEl.textContent = "Password reset email sent — check your inbox.";
+  } catch (err) {
+    errorEl.style.color = "#e0455b";
+    errorEl.textContent = friendlyError(err.code);
+  }
+});
+
+async function login() {
+  errorEl.textContent = "";
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+
+  if (!email || !password) {
+    errorEl.textContent = "Please enter all fields.";
+    return;
+  }
+
+  loginBtn.disabled = true;
+  loginBtn.textContent = "Logging in...";
+
+  try {
+    await auth.signInWithEmailAndPassword(email, password);
+    window.location.href = "budget.html";
+  } catch (err) {
+    errorEl.textContent = friendlyError(err.code);
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Login";
+  }
+}
+
+function friendlyError(code) {
+  switch (code) {
+    case "auth/invalid-credential":
+    case "auth/wrong-password":
+    case "auth/user-not-found":
+      return "Incorrect email or password.";
+    case "auth/invalid-email":
+      return "That email address looks invalid.";
+    default:
+      return "Something went wrong. Please try again.";
+  }
+}
+</script>
+
+</body>
+</html>
