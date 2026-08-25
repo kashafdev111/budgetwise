@@ -21,7 +21,7 @@ A full-stack monthly expense tracker built with vanilla JavaScript and Firebase 
 - Chart.js
 
 ## Live Demo
- *Coming soon*
+https://budgetwise-a2ffa.web.app
 
 ## Running locally
 
