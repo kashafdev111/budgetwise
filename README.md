@@ -31,8 +31,10 @@ A full-stack monthly expense tracker built with vanilla JavaScript and Firebase 
 4. Open `index.html` with a local server (e.g. VS Code's Live Server extension)
 
 ## Screenshots
-
-*(Add a few screenshots here — Dashboard, Add Expense, History, and the chatbot open)*
+<img width="1328" height="638" alt="login page" src="https://github.com/user-attachments/assets/c1594f44-1186-43e6-9a18-0a732ab27798" />
+<img width="1345" height="641" alt="Dashboard" src="https://github.com/user-attachments/assets/4eeafe12-f428-4a9a-b672-12437d5e32ee" />
+<img width="1352" height="639" alt="Expenses" src="https://github.com/user-attachments/assets/31e2af6d-ca8e-4dea-9e39-bbc3c8786042" />
+<img width="1357" height="644" alt="Expense History" src="https://github.com/user-attachments/assets/999460ef-484a-47da-900a-1480833b055f" />
 
 ## Author
 
